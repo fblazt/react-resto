@@ -163,6 +163,7 @@ module.exports = {
     },
     fontFamily: {
       sans: [
+        'Livvic',
         'ui-sans-serif',
         'system-ui',
         '-apple-system',
