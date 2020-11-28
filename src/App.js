@@ -17,7 +17,7 @@ export default function App() {
   let googleMap;
   useEffect(() => {
     const googleMapScript = document.createElement("script");
-    googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAc5J06GRelgTwxtQmuAe5A0VvHdsi2sQ4&libraries=places`;
+    googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_MAPS_KEY}&libraries=places`;
     googleMapScript.async = true;
     window.document.body.appendChild(googleMapScript);
     googleMapScript.addEventListener("load", () => {
@@ -59,7 +59,7 @@ export default function App() {
     );
   };
   return (
-    <div className="min-h-screen min-w-full p-3 bg-gradient-to-br from-blue-200 to-green-200 flex flex-nowrap">
+    <div className="font-sans min-h-screen min-w-full p-3 bg-gradient-to-br from-blue-200 to-green-200 flex flex-nowrap">
       <div id="google-map" ref={googleMapRef} className="w-3/4 pt-2 mt-24 ml-2 mr-3 mb-2 bg-white rounded-3xl shadow-lg">
         <div className="w-full -mt-24 flex flex-nowrap">
           <div className="h-16 w-16 bg-white rounded-3xl shadow-lg font-bold text-6xl text-center"><span>R</span></div>
