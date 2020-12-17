@@ -27,7 +27,7 @@ export default function RestaurantReview() {
       </div>
       <div className="mb-2">
         <label htmlFor="comments">Your comments</label>
-        <textarea name="" id="" cols="30" rows="10" className="w-full border-2 border-gray-200 rounded-lg"></textarea>
+        <textarea name="" id="" cols="30" rows="5" className="w-full border-2 border-gray-200 rounded-lg"></textarea>
       </div>
       <button className="py-1 px-2 bg-blue-500 transition hover:bg-blue-600 text-white rounded-lg shadow-md">Submit</button>
     </div>

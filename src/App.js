@@ -1,5 +1,4 @@
-import React, { Component, useRef, useEffect } from 'react'
-import { Map, GoogleApiWrapper } from 'google-maps-react'
+import React from 'react'
 
 import Search from './components/Search'
 import RestaurantDetail from './components/RestaurantDetail' 
@@ -100,10 +99,39 @@ export default function App() {
     <div className="min-h-screen bg-gradient-to-br from-blue-400 to-green-400 flex">
       <div className="min-h-screen flex-1">
         <div className="min-h-screen p-3 grid grid-cols-12 grid-rows-6">
-          <div className="mr-2 mb-2 col-span-1 bg-white shadow-lg rounded-3xl"></div>
-          <div className="ml-2 mr-2 mb-2 col-span-7 bg-white shadow-lg rounded-3xl"></div>
-          <div className="ml-2 col-span-4 row-span-6 bg-white shadow-lg rounded-3xl"></div>
-          <div className="mt-2 mr-2 col-span-8 row-span-6 bg-white shadow-lg rounded-3xl">
+          <div className="mr-2 mb-2 col-span-1 bg-white shadow-lg rounded-3xl flex items-center justify-center font-bold text-6xl"><span>R</span></div>
+          <div className="ml-2 mr-2 mb-2 col-span-8 rounded-3xl">
+            <Search/>
+          </div>
+          <div className="ml-2 p-2 col-span-3 row-span-6 bg-white shadow-lg rounded-3xl">
+            {/* Restaurant list */}
+            <div>
+              <div className="w-full flex flex-row items-end content-end">
+                <div className="mb-3">
+                  <label htmlFor="filter">Filter by rate</label>
+                  <select name="filter" id="filter" className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                  </select>
+                </div>
+              </div>
+              <div className="overflow-y-auto max-h-screen">
+                <RestaurantDetail></RestaurantDetail>
+                <RestaurantDetail></RestaurantDetail>
+                <RestaurantDetail></RestaurantDetail>
+              </div>
+            </div>
+
+            {/* Add review */}
+            {/* <RestaurantReview/> */}
+
+            {/* Add restaurant */}
+            {/* <RestaurantAdd/> */}
+          </div>
+          <div className="mt-2 mr-2 col-span-9 row-span-6 bg-white shadow-lg rounded-3xl">
             <MapContainer/>
           </div>
         </div>

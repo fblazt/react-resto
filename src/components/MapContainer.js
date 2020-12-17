@@ -1,31 +1,69 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React from 'react'
+import { useState } from 'react'
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
+import ScriptLoaded from '../../docs/ScriptLoaded'
 
-export default function MapContainer({options, onMount, className, onMountProps}) {
-  const ref = useRef()
-  const [map, setMap] = useState()
+export default function MapContainer() {
+  const [position, setPosition] = useState({})
 
-  useEffect(() => {
-    const onLoad = () => setMap(new window.google.maps.Map(ref.current, options))
-    if (!window.google) {
-      const script = document.createElement(`script`)
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_MAPS_KEY}`
-      document.head.append(script)
-      script.addEventListener(`load`, onLoad)
-      return () => script.removeEventListener(`load`, onLoad)
-    } else onLoad()
-  }, [options])
+  const containerStyle = {
+    width: '100%',
+    height: '100%',
+  }
 
-  if (map && typeof onMount === `function`) onMount(map, onMountProps)
+  const center = {
+    lat: 6,
+    lng: 3
+  }
+
+  const zoom = 16
+
+  const restaurantCoordinates = []
+  
+  const restaurants = [
+    {
+      name: 'Bakery',
+      coordinates: {
+        lat: -6.151353501429153,
+        lng: 106.781478421907
+      }
+    },
+    {
+      name: 'Soup',
+      coordinates: {
+        lat: -6.154255057375307,
+        lng: 106.77551311782378
+      }
+    }
+  ]
+
+  restaurants.forEach(item => {
+    restaurantCoordinates.push(<Marker position={item.coordinates}/>)
+  });
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(getPosition);
+  }function getPosition(position) {
+    let userPosition = {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude,
+    }
+    setPosition(userPosition);
+  }
 
   return (
-    <div style={{ height: `100%` }} 
-    {...{ ref, className }}/>
+    <div className="h-full w-full rounded-3xl">
+      <LoadScript className="rounded-3xl" googleMapsApiKey={process.env.REACT_APP_MAPS_KEY}>
+        <GoogleMap 
+        className="rounded-3xl"
+        mapContainerStyle={containerStyle}
+        center={position}
+        zoom={zoom}>
+          <Marker
+          position={position}/>
+          {restaurantCoordinates}
+        </GoogleMap>
+      </LoadScript>
+    </div>
   )
-}
-
-Map.defaultProps = {
-  options: {
-    center: { lat: 48, lng: 8 },
-    zoom: 5
-  }
 }
