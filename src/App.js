@@ -1,101 +1,127 @@
 import React from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 import Search from './components/Search'
 import RestaurantDetail from './components/RestaurantDetail' 
 import RestaurantReview from './components/RestaurantReview' 
 import RestaurantAdd from './components/RestaurantAdd' 
-import MapContainer from './components/MapContainer'
-
-const mapStyles = {
-  width: '100%',
-  height: '100%'
-}
+import MapContainer from './components/MapContainer'  
 
 export default function App() {
-  // const placeName = 'Jakarta'; 
-  // const googleMapRef = useRef();
-  // let googleMap;
-  // useEffect(() => {
-  //   const googleMapScript = document.createElement("script");
-  //   googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_MAPS_KEY}&libraries=places`;
-  //   googleMapScript.async = true;
-  //   window.document.body.appendChild(googleMapScript);
-  //   googleMapScript.addEventListener("load", () => {
-  //     getLatLng();
-  //   });
-  // }, []);
+  // const [position, setPosition ] = useState({})
+  const [type, setType] = useState(1)
+  const [allRestaurants, setAllRestaurants] = useState([
+    {
+      name: 'Bakery',
+      coordinates: {
+        lat: -6.151353501429153,
+        lng: 106.781478421907
+      }
+    },
+    {
+      name: 'Soup',
+      coordinates: {
+        lat: -6.154255057375307,
+        lng: 106.77551311782378
+      }
+    }
+  ])
 
-  // const createGoogleMap = (coordinates) => {
-  //   googleMap = new window.google.maps.Map(googleMapRef.current, {
-  //     zoom: 16,
-  //     center: {
-  //       lat: coordinates.lat(),
-  //       lng: coordinates.lng(),
+  // let allRestaurants
+
+  // if (navigator.geolocation) {
+  //   const getPosition = (position) => {
+  //     let userPosition = {
+  //       lat: position.coords.latitude,
+  //       lng: position.coords.longitude,
   //     }
-  //   });
-  // };
-  // const getLatLng = () => {
-  //   let lat, lng, placeId;
-  //   new window.google.maps.Geocoder().geocode(
-  //     { address: `${placeName}` },
-  //     function (results, status) {
-  //       if (status === window.google.maps.GeocoderStatus.OK) {
-  //         placeId = results[0].place_id;
-  //         createGoogleMap(results[0].geometry.location);
-  //         lat = results[0].geometry.location.lat();
-  //         lng = results[0].geometry.location.lng();
-  //         new window.google.maps.Marker({
-  //           position: { lat, lng },
-  //           map: googleMap,
-  //           animation: window.google.maps.Animation.DROP,
-  //           title: `${placeName}`,
-  //         });
-  //       } else {
-  //         alert(
-  //           "Geocode was not successful for the following reason: " + status
-  //         );
-  //       }
+  //     setPosition(userPosition);
+  //   }
+  //   navigator.geolocation.getCurrentPosition(getPosition);
+  // } else {
+  //   console.log('No navigator geolocation')
+  // }
+
+  // const restaurants = [
+  //   {
+  //     name: 'Bakery',
+  //     coordinates: {
+  //       lat: -6.151353501429153,
+  //       lng: 106.781478421907
   //     }
-  //   );
-  // };
+  //   },
+  //   {
+  //     name: 'Soup',
+  //     coordinates: {
+  //       lat: -6.154255057375307,
+  //       lng: 106.77551311782378
+  //     }
+  //   }
+  // ]
+
+  useEffect (() => {
+    // if (position) {
+      // console.log(`Position: ${position}`)
+      axios.get(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-6.1559542,106.76955970000002&radius=2000&type=restaurant&key=
+      ${process.env.REACT_APP_MAPS_KEY}`)
+      .then(res => {
+        // console.log(res)
+        let data = res.data.results
+        let googleRestaurants = data.map((item,index) =>{     
+          return   {
+            id: index,
+            name: item.name,
+            address: item.vicinity,
+            coordinates: {
+              lat: item.geometry.location.lat,
+              lng: item.geometry.location.lng,
+            },
+            pict:'https://lh5.googleusercontent.com/p/AF1QipMfCQ-dXE9EqgiWkJr9QQRshjKpDmPAjzWel7fE=w408-h305-k-no',
+            // rating: 0,
+            // ratings: [
+            //   {
+            //     stars: 4,
+            //     comment: 'Great! But not many veggie options.'
+            //   },
+            //   {
+            //     stars: 5,
+            //     comment: 'My favorite restaurant!'
+            //   },
+            // ]
+          }
+        })
+        // setAllRestaurants(allRestaurants.concat(googleRestaurants))
+        console.log(`Google restaurants: ${googleRestaurants}`)
+      //  console.log(jsonRestaurant)
+      //   jsonRestaurant = jsonRestaurant.concat(newArr)
+      //   jsonRestaurant.map((item)=>{
+      //     let rating = 0;
+      //     item.ratings.forEach((review)=>{
+      //       rating += review.stars
+      //     })
+      //     rating = rating/item.ratings.length;
+      //     item.rating = Math.round(rating)
+      //     return item
+      //   })
+      //    setRestaurant(jsonRestaurant) ;
+      //   //  updatingthe filter restaurant
+      //   setFilterRestaurants(jsonRestaurant)
+      //   console.log(jsonRestaurant)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    // }
+  }, [])
+  console.log(`After useEffect`)
+
+
+  const changeComponent = (type) => {
+    setType(type)
+  }
+
   return (
-    // <div className="font-sans min-h-screen min-w-full p-3 bg-gradient-to-br from-blue-200 to-green-200 flex flex-nowrap">
-    //   <div className="w-3/4 pt-2 mt-24 ml-2 mr-3 mb-2 bg-white rounded-3xl shadow-lg">
-    //     <div className="w-full -mt-24 flex flex-nowrap">
-    //       <div className="h-16 w-16 bg-white rounded-3xl shadow-lg font-bold text-6xl text-center"><span>R</span></div>
-    //       <Search></Search>
-    //     </div>
-    //   </div>
-    //   <div className="max-h-screen w-1/4 my-2 ml-3 mr-2 p-2 bg-white rounded-3xl shadow-lg overflow-auto">
-    //     <div>
-
-    //       {/* Restaurant card */}
-    //       <div>
-    //         <div className="w-full flex flex-row items-end content-end">
-    //           <div className="mb-3">
-    //             <label htmlFor="filter">Filter by rate</label>
-    //             <select name="filter" id="filter" className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-    //               <option value="1">1</option>
-    //               <option value="2">2</option>
-    //               <option value="3">3</option>
-    //               <option value="4">4</option>
-    //               <option value="5">5</option>
-    //             </select>
-    //           </div>
-    //         </div>
-    //         <div>
-    //           <RestaurantDetail></RestaurantDetail>
-    //         </div>
-    //       </div>
-
-    //       {/* Add review */}
-    //       {/* <RestaurantReview></RestaurantReview> */}
-
-    //       {/* Add restaurant */}
-    //       {/* <RestaurantAdd></RestaurantAdd> */}
-    //     </div>
-    //   </div>
-    // </div>
     <div className="min-h-screen bg-gradient-to-br from-blue-400 to-green-400 flex">
       <div className="min-h-screen flex-1">
         <div className="min-h-screen p-3 grid grid-cols-12 grid-rows-6">
@@ -104,35 +130,40 @@ export default function App() {
             <Search/>
           </div>
           <div className="ml-2 p-2 col-span-3 row-span-6 bg-white shadow-lg rounded-3xl">
+
             {/* Restaurant list */}
-            <div>
-              <div className="w-full flex flex-row items-end content-end">
-                <div className="mb-3">
-                  <label htmlFor="filter">Filter by rate</label>
-                  <select name="filter" id="filter" className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                  </select>
+            {type === 1 &&
+              <div>
+                <div className="w-full flex flex-row items-end content-end">
+                  <div className="mb-3">
+                    <label htmlFor="filter">Filter by rate</label>
+                    <select name="filter" id="filter" className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="overflow-y-auto max-h-screen">
+                  <RestaurantDetail changeComponent={changeComponent}></RestaurantDetail>
                 </div>
               </div>
-              <div className="overflow-y-auto max-h-screen">
-                <RestaurantDetail></RestaurantDetail>
-                <RestaurantDetail></RestaurantDetail>
-                <RestaurantDetail></RestaurantDetail>
-              </div>
-            </div>
+            }
 
             {/* Add review */}
-            {/* <RestaurantReview/> */}
+            {type === 2 && 
+              <RestaurantReview/>             
+            }
 
             {/* Add restaurant */}
-            {/* <RestaurantAdd/> */}
+            {type === 3 && 
+              <RestaurantAdd/>
+            }
           </div>
           <div className="mt-2 mr-2 col-span-9 row-span-6 bg-white shadow-lg rounded-3xl">
-            <MapContainer/>
+            <MapContainer allRestaurants={allRestaurants}/>
           </div>
         </div>
       </div>
