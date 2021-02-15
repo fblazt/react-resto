@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 
-export default function MapContainer({allRestaurants}) {
-  console.log(`MapContainer: ${allRestaurants}`)
+export default function MapContainer({allRestaurants, newRestaurantForm}) {
   const [position, setPosition] = useState()
 
   const containerStyle = {
@@ -10,7 +9,7 @@ export default function MapContainer({allRestaurants}) {
     height: '100%',
   }
 
-  const zoom = 16
+  const zoom = 14
 
   const restaurantCoordinates = []
 
@@ -45,6 +44,11 @@ export default function MapContainer({allRestaurants}) {
   //   console.log('No navigator geolocation')
   // }
 
+  const mapClick = (mapsMouseEvent) => {
+    sessionStorage.setItem('tempCoordinates', mapsMouseEvent.latLng)
+    newRestaurantForm()
+  }
+
   return (
     <div className="h-full w-full rounded-3xl">
       <LoadScript className="rounded-3xl" googleMapsApiKey={process.env.REACT_APP_MAPS_KEY}>
@@ -52,12 +56,13 @@ export default function MapContainer({allRestaurants}) {
         className="rounded-3xl"
         mapContainerStyle={containerStyle}
         center={position}
-        zoom={zoom}>
-          <Marker
-          position={position}/>
-          {/* {allRestaurants.map(item => {
-            return (<Marker position={item.coordinates}/>)
-          })} */}
+        zoom={zoom}
+        onClick={mapClick}>
+          {/* <Marker
+          position={position}/> */}
+          {allRestaurants.map(item => {
+            return (<Marker position={item.coordinates} key={item.id}/>)
+          })}
           {/* {restaurantCoordinates} */}
         </GoogleMap>
       </LoadScript>

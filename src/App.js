@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 import Search from './components/Search'
+import RestaurantCard from './components/RestaurantCard' 
 import RestaurantDetail from './components/RestaurantDetail' 
 import RestaurantReview from './components/RestaurantReview' 
 import RestaurantAdd from './components/RestaurantAdd' 
@@ -11,24 +12,53 @@ import MapContainer from './components/MapContainer'
 export default function App() {
   // const [position, setPosition ] = useState({})
   const [type, setType] = useState(1)
-  const [allRestaurants, setAllRestaurants] = useState([
+  const [allRestaurants, setAllRestaurants] = useState([])
+  const [restaurantInfo, setRestaurantInfo] = useState({})
+
+  let localRestaurants = [
     {
+      id: -2,
       name: 'Bakery',
       coordinates: {
         lat: -6.151353501429153,
         lng: 106.781478421907
-      }
+      },
+      address: 'Jalan Taman Ratu Raya CC1 No.53, RT.4/RW.13, Kedoya Utara',
+      pict:'https://lh5.googleusercontent.com/p/AF1QipMfCQ-dXE9EqgiWkJr9QQRshjKpDmPAjzWel7fE=w408-h305-k-no',
+      rating: 4,
+      ratings: [
+        {
+          stars: 4,
+          comment: 'Great! But not many veggie options.'
+        },
+        {
+          stars: 4,
+          comment: 'My favorite restaurant!'
+        },
+      ]
     },
     {
+      id: -1,
       name: 'Soup',
       coordinates: {
         lat: -6.154255057375307,
         lng: 106.77551311782378
-      }
+      },
+      address: 'Jalan Pesing Poglar RT.9/RW.5, Kedaung Kali Angke',
+      pict:'https://lh5.googleusercontent.com/p/AF1QipMfCQ-dXE9EqgiWkJr9QQRshjKpDmPAjzWel7fE=w408-h305-k-no',
+      rating: 4,
+      ratings: [
+        {
+          stars: 4,
+          comment: 'Great! But not many veggie options.'
+        },
+        {
+          stars: 4,
+          comment: 'My favorite restaurant!'
+        },
+      ]
     }
-  ])
-
-  // let allRestaurants
+  ]
 
   // if (navigator.geolocation) {
   //   const getPosition = (position) => {
@@ -42,23 +72,6 @@ export default function App() {
   // } else {
   //   console.log('No navigator geolocation')
   // }
-
-  // const restaurants = [
-  //   {
-  //     name: 'Bakery',
-  //     coordinates: {
-  //       lat: -6.151353501429153,
-  //       lng: 106.781478421907
-  //     }
-  //   },
-  //   {
-  //     name: 'Soup',
-  //     coordinates: {
-  //       lat: -6.154255057375307,
-  //       lng: 106.77551311782378
-  //     }
-  //   }
-  // ]
 
   useEffect (() => {
     // if (position) {
@@ -78,21 +91,21 @@ export default function App() {
               lng: item.geometry.location.lng,
             },
             pict:'https://lh5.googleusercontent.com/p/AF1QipMfCQ-dXE9EqgiWkJr9QQRshjKpDmPAjzWel7fE=w408-h305-k-no',
-            // rating: 0,
-            // ratings: [
-            //   {
-            //     stars: 4,
-            //     comment: 'Great! But not many veggie options.'
-            //   },
-            //   {
-            //     stars: 5,
-            //     comment: 'My favorite restaurant!'
-            //   },
-            // ]
+            rating: 4,
+            ratings: [
+              {
+                stars: 4,
+                comment: 'Great! But not many veggie options.'
+              },
+              {
+                stars: 4,
+                comment: 'My favorite restaurant!'
+              },
+            ]
           }
         })
-        // setAllRestaurants(allRestaurants.concat(googleRestaurants))
-        console.log(`Google restaurants: ${googleRestaurants}`)
+        setAllRestaurants(allRestaurants.concat(googleRestaurants))
+        // console.log(`Google restaurants: ${googleRestaurants}`)
       //  console.log(jsonRestaurant)
       //   jsonRestaurant = jsonRestaurant.concat(newArr)
       //   jsonRestaurant.map((item)=>{
@@ -114,11 +127,28 @@ export default function App() {
       })
     // }
   }, [])
-  console.log(`After useEffect`)
 
 
   const changeComponent = (type) => {
     setType(type)
+  }
+
+  const newRestaurantForm = () => {
+    setType(3)
+  }
+
+  const addRestaurant = (data) => {
+    let existingRestaurants = [...allRestaurants]
+    existingRestaurants.push(data)
+    setAllRestaurants(existingRestaurants)
+    setType(1)
+  }
+
+  const restaurantDetail= (id) => {
+    let restaurant = allRestaurants.filter(restaurant => restaurant.id === id)
+    setRestaurantInfo(restaurant[0])
+    setType(4)
+    // console.log(restaurant)
   }
 
   return (
@@ -128,7 +158,7 @@ export default function App() {
           <div className="mr-2 mb-2 col-span-1 bg-white shadow-lg rounded-3xl flex items-center justify-center font-bold text-6xl"><span>R</span></div>
           <div className="ml-2 mr-2 mb-2 col-span-8 rounded-3xl">
             <Search/>
-          </div>
+          </div>  
           <div className="ml-2 p-2 col-span-3 row-span-6 bg-white shadow-lg rounded-3xl">
 
             {/* Restaurant list */}
@@ -147,7 +177,11 @@ export default function App() {
                   </div>
                 </div>
                 <div className="overflow-y-auto max-h-screen">
-                  <RestaurantDetail changeComponent={changeComponent}></RestaurantDetail>
+                  {allRestaurants.map(restaurant => {
+                    return (
+                      <RestaurantCard key={restaurant.id} restaurantInfo={restaurant} restaurantDetail={restaurantDetail}></RestaurantCard>
+                    )
+                  })}
                 </div>
               </div>
             }
@@ -159,11 +193,18 @@ export default function App() {
 
             {/* Add restaurant */}
             {type === 3 && 
-              <RestaurantAdd/>
+              <RestaurantAdd allRestaurants={allRestaurants} addRestaurant={addRestaurant} />
             }
+
+            {/* Restaurant detail */}
+            {type === 4 && 
+              <RestaurantDetail restaurantInfo={restaurantInfo} setType={setType}/>
+            }
+
           </div>
+
           <div className="mt-2 mr-2 col-span-9 row-span-6 bg-white shadow-lg rounded-3xl">
-            <MapContainer allRestaurants={allRestaurants}/>
+            <MapContainer allRestaurants={allRestaurants} newRestaurantForm={newRestaurantForm}/>
           </div>
         </div>
       </div>
