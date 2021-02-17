@@ -76,7 +76,7 @@ export default function App() {
   useEffect (() => {
     // if (position) {
       // console.log(`Position: ${position}`)
-      axios.get(`http://localhost:8080/https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-6.1559542,106.76955970000002&radius=2000&type=restaurant&key=
+      axios.get(`${process.env.REACT_APP_CORS_HANDLER}https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-6.1559542,106.76955970000002&radius=2000&type=restaurant&key=
       ${process.env.REACT_APP_MAPS_KEY}`)
       .then(res => {
         // console.log(res)
