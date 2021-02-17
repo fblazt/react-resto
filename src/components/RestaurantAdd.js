@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 
-export default function RestaurantAdd({ allRestaurants, addRestaurant }) {
+export default function RestaurantAdd({ allRestaurants, addRestaurant, setType }) {
   const [imgUrl, setimgUrl] = useState('')
   const [name, setName] = useState('')
   const [address, setAddress] = useState('')
@@ -35,22 +35,25 @@ export default function RestaurantAdd({ allRestaurants, addRestaurant }) {
 
   return (
     <div>
-      <h4 className="mb-5 text-xl font-semibold">Add new restaurant</h4>
-      <form onSubmit={newRestaurant}>
-        <div className="mb-3">
-          <label htmlFor="url" className="text-lg  text-gray-800">Image link</label>
-          <input type="text" className="w-full h-8 mt-1 border-2 border-gray-400 rounded-md" required value={imgUrl} onChange={(e) => setimgUrl(e.target.value)}/>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="name" className="text-lg text-gray-800">Restaurant name</label>
-          <input type="text" className="w-full h-8 mt-1 border-2 border-gray-400 rounded-md" required value={name} onChange={(e) => setName(e.target.value)}/>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="url" className="text-lg text-gray-800">Address</label>
-          <textarea name="address" id="address" cols="30" rows="3" className="w-full mt-1 border-2 border-gray-400 rounded-md" required value={address} onChange={(e) => setAddress(e.target.value)}></textarea>
-        </div>
-        <button onClick={newRestaurant} className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Submit</button>
-      </form>
+      <button onClick={() => setType(1)} className="mb-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">Back</button>
+      <div>
+        <h4 className="mb-5 text-xl font-semibold">Add new restaurant</h4>
+        <form onSubmit={newRestaurant}>
+          <div className="mb-3">
+            <label htmlFor="url" className="text-lg  text-gray-800">Image link</label>
+            <input type="text" className="w-full h-8 mt-1 border-2 border-gray-400 rounded-md" required value={imgUrl} onChange={(e) => setimgUrl(e.target.value)}/>
+          </div>
+          <div className="mb-3">
+            <label htmlFor="name" className="text-lg text-gray-800">Restaurant name</label>
+            <input type="text" className="w-full h-8 mt-1 border-2 border-gray-400 rounded-md" required value={name} onChange={(e) => setName(e.target.value)}/>
+          </div>
+          <div className="mb-3">
+            <label htmlFor="url" className="text-lg text-gray-800">Address</label>
+            <textarea name="address" id="address" cols="30" rows="3" className="w-full mt-1 border-2 border-gray-400 rounded-md" required value={address} onChange={(e) => setAddress(e.target.value)}></textarea>
+          </div>
+          <button onClick={newRestaurant} className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Submit</button>
+        </form>
+      </div>
     </div>
   )
 }

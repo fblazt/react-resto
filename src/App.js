@@ -76,7 +76,7 @@ export default function App() {
   useEffect (() => {
     // if (position) {
       // console.log(`Position: ${position}`)
-      axios.get(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-6.1559542,106.76955970000002&radius=2000&type=restaurant&key=
+      axios.get(`http://localhost:8080/https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-6.1559542,106.76955970000002&radius=2000&type=restaurant&key=
       ${process.env.REACT_APP_MAPS_KEY}`)
       .then(res => {
         // console.log(res)
@@ -90,7 +90,7 @@ export default function App() {
               lat: item.geometry.location.lat,
               lng: item.geometry.location.lng,
             },
-            pict:'https://lh5.googleusercontent.com/p/AF1QipMfCQ-dXE9EqgiWkJr9QQRshjKpDmPAjzWel7fE=w408-h305-k-no',
+            pict:`https://maps.googleapis.com/maps/api/streetview?size=400x250&location=${item.geometry.location.lat},${item.geometry.location.lng}&heading=70&pitch=0&key=${process.env.REACT_APP_MAPS_KEY}`,
             rating: 4,
             ratings: [
               {
@@ -193,12 +193,12 @@ export default function App() {
 
             {/* Add restaurant */}
             {type === 3 && 
-              <RestaurantAdd allRestaurants={allRestaurants} addRestaurant={addRestaurant} />
+              <RestaurantAdd allRestaurants={allRestaurants} addRestaurant={addRestaurant} setType={setType} />
             }
 
             {/* Restaurant detail */}
             {type === 4 && 
-              <RestaurantDetail restaurantInfo={restaurantInfo} setType={setType}/>
+              <RestaurantDetail restaurantInfo={restaurantInfo} setType={setType} />
             }
 
           </div>
