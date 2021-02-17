@@ -94,10 +94,12 @@ export default function App() {
             rating: 4,
             ratings: [
               {
+                username: 'Mamang Asep',
                 stars: 4,
                 comment: 'Great! But not many veggie options.'
               },
               {
+                username: 'Siti',
                 stars: 4,
                 comment: 'My favorite restaurant!'
               },
@@ -155,11 +157,20 @@ export default function App() {
     <div className="min-h-screen bg-gradient-to-br from-blue-400 to-green-400 flex">
       <div className="min-h-screen flex-1">
         <div className="min-h-screen p-3 grid grid-cols-12 grid-rows-6">
-          <div className="mr-2 mb-2 col-span-1 bg-white shadow-lg rounded-3xl flex items-center justify-center font-bold text-6xl"><span>R</span></div>
-          <div className="ml-2 mr-2 mb-2 col-span-8 rounded-3xl">
+          <div className="z-50 p-6 fixed top-6 left-6 bg-gradient-to-br from-blue-400 to-green-400 text-white shadow-md rounded-3xl flex items-center justify-center font-bold text-6xl">
+            <span>R</span>
+          </div>
+          
+          {/* <div className="ml-2 mr-2 mb-2 col-span-8 rounded-3xl">
             <Search/>
-          </div>  
-          <div className="ml-2 p-2 col-span-3 row-span-6 bg-white shadow-lg rounded-3xl">
+          </div>   */}
+
+          <div className="mr-2 col-span-9 row-span-6 bg-white shadow-lg rounded-3xl z-40">
+            <MapContainer allRestaurants={allRestaurants} newRestaurantForm={newRestaurantForm}/>
+          </div>
+
+          
+          <div className="h-6/12 ml-2 py-2 px-4 col-span-3 row-span-6 bg-white shadow-lg rounded-3xl">
 
             {/* Restaurant list */}
             {type === 1 &&
@@ -203,9 +214,6 @@ export default function App() {
 
           </div>
 
-          <div className="mt-2 mr-2 col-span-9 row-span-6 bg-white shadow-lg rounded-3xl">
-            <MapContainer allRestaurants={allRestaurants} newRestaurantForm={newRestaurantForm}/>
-          </div>
         </div>
       </div>
     </div>

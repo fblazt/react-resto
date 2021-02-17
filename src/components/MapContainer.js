@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
+import '../assets/map-container.css'
 
 export default function MapContainer({allRestaurants, newRestaurantForm}) {
   const [position, setPosition] = useState()
@@ -47,16 +48,23 @@ export default function MapContainer({allRestaurants, newRestaurantForm}) {
   const mapClick = (mapsMouseEvent) => {
     sessionStorage.setItem('tempCoordinates', mapsMouseEvent.latLng)
     newRestaurantForm()
+    console.log(sessionStorage.getItem('tempCoordinates'))
+  }
+
+  let options = {
+    mapTypeControl: false,
+    streetViewControl: false,
+    fullscreenControl: false,
   }
 
   return (
-    <div className="h-full w-full rounded-3xl">
-      <LoadScript className="rounded-3xl" googleMapsApiKey={process.env.REACT_APP_MAPS_KEY}>
-        <GoogleMap 
-        className="rounded-3xl"
+    <LoadScript className="rounded-3xl" googleMapsApiKey={process.env.REACT_APP_MAPS_KEY}>
+      <GoogleMap 
+        id="map-container"
         mapContainerStyle={containerStyle}
         center={position}
         zoom={zoom}
+        options={options}
         onClick={mapClick}>
           {/* <Marker
           position={position}/> */}
@@ -64,8 +72,7 @@ export default function MapContainer({allRestaurants, newRestaurantForm}) {
             return (<Marker position={item.coordinates} key={item.id}/>)
           })}
           {/* {restaurantCoordinates} */}
-        </GoogleMap>
-      </LoadScript>
-    </div>
+      </GoogleMap>
+    </LoadScript>
   )
 }
