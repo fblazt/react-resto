@@ -10,7 +10,7 @@ import RestaurantAdd from './components/RestaurantAdd'
 import MapContainer from './components/MapContainer'  
 
 export default function App() {
-  // const [position, setPosition ] = useState({})
+  const [position, setPosition ] = useState({})
   const [type, setType] = useState(1)
   const [allRestaurants, setAllRestaurants] = useState([])
   const [restaurantInfo, setRestaurantInfo] = useState({})
@@ -60,75 +60,52 @@ export default function App() {
     }
   ]
 
-  // if (navigator.geolocation) {
-  //   const getPosition = (position) => {
-  //     let userPosition = {
-  //       lat: position.coords.latitude,
-  //       lng: position.coords.longitude,
-  //     }
-  //     setPosition(userPosition);
-  //   }
-  //   navigator.geolocation.getCurrentPosition(getPosition);
-  // } else {
-  //   console.log('No navigator geolocation')
-  // }
-
-  useEffect (() => {
-    // if (position) {
-      // console.log(`Position: ${position}`)
-      axios.get(`${process.env.REACT_APP_CORS_HANDLER}https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-6.1559542,106.76955970000002&radius=2000&type=restaurant&key=
-      ${process.env.REACT_APP_MAPS_KEY}`)
-      .then(res => {
-        // console.log(res)
-        let data = res.data.results
-        let googleRestaurants = data.map((item,index) =>{     
-          return   {
-            id: index,
-            name: item.name,
-            address: item.vicinity,
-            coordinates: {
-              lat: item.geometry.location.lat,
-              lng: item.geometry.location.lng,
-            },
-            pict:`https://maps.googleapis.com/maps/api/streetview?size=400x250&location=${item.geometry.location.lat},${item.geometry.location.lng}&heading=70&pitch=0&key=${process.env.REACT_APP_MAPS_KEY}`,
-            rating: 4,
-            ratings: [
-              {
-                username: 'Mamang Asep',
-                stars: 4,
-                comment: 'Great! But not many veggie options.'
-              },
-              {
-                username: 'Siti',
-                stars: 4,
-                comment: 'My favorite restaurant!'
-              },
-            ]
-          }
-        })
-        setAllRestaurants(allRestaurants.concat(googleRestaurants))
-        // console.log(`Google restaurants: ${googleRestaurants}`)
-      //  console.log(jsonRestaurant)
-      //   jsonRestaurant = jsonRestaurant.concat(newArr)
-      //   jsonRestaurant.map((item)=>{
-      //     let rating = 0;
-      //     item.ratings.forEach((review)=>{
-      //       rating += review.stars
-      //     })
-      //     rating = rating/item.ratings.length;
-      //     item.rating = Math.round(rating)
-      //     return item
-      //   })
-      //    setRestaurant(jsonRestaurant) ;
-      //   //  updatingthe filter restaurant
-      //   setFilterRestaurants(jsonRestaurant)
-      //   console.log(jsonRestaurant)
-      })
-      .catch(err => {
-        console.log(err)
-      })
-    // }
+  useEffect(() => {
+    if (navigator.geolocation) {
+      const getPosition = (position) => {
+        let userPosition = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        }
+        setPosition(userPosition);
+      }
+      navigator.geolocation.getCurrentPosition(getPosition);
+    }
   }, [])
+
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_CORS_HANDLER}https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${position.lat},${position.lng}&radius=2000&type=restaurant&key=
+    ${process.env.REACT_APP_MAPS_KEY}`)
+    .then(res => {
+      let data = res.data.results
+      let googleRestaurants = data.map((item,index) =>{     
+        return   {
+          id: index,
+          name: item.name,
+          address: item.vicinity,
+          coordinates: {
+            lat: item.geometry.location.lat,
+            lng: item.geometry.location.lng,
+          },
+          pict:`https://maps.googleapis.com/maps/api/streetview?size=400x250&location=${item.geometry.location.lat},${item.geometry.location.lng}&heading=70&pitch=0&key=${process.env.REACT_APP_MAPS_KEY}`,
+          rating: 4,
+          ratings: [
+            {
+              username: 'Mamang Asep',
+              stars: 4,
+              comment: 'Great! But not many veggie options.'
+            },
+            {
+              username: 'Siti',
+              stars: 4,
+              comment: 'My favorite restaurant!'
+            },
+          ]
+        }
+      })
+      setAllRestaurants(allRestaurants.concat(googleRestaurants))
+    })
+  }, [position])
 
 
   const changeComponent = (type) => {
@@ -150,7 +127,6 @@ export default function App() {
     let restaurant = allRestaurants.filter(restaurant => restaurant.id === id)
     setRestaurantInfo(restaurant[0])
     setType(4)
-    // console.log(restaurant)
   }
 
   return (
