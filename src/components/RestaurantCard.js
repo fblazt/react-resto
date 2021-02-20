@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function RestaurantCard({ restaurantInfo, restaurantDetail }) {
+export default function RestaurantCard({ restaurantInfo, restaurantDetail, reviewRestaurant }) {
 
   const overallRatings = (length) => {
     let ratings = []
@@ -12,6 +12,11 @@ export default function RestaurantCard({ restaurantInfo, restaurantDetail }) {
       )
     }
     return ratings
+  }
+
+  const review = (e) => {
+    e.stopPropagation()
+    reviewRestaurant(restaurantInfo.id)
   }
 
   return (
@@ -36,7 +41,7 @@ export default function RestaurantCard({ restaurantInfo, restaurantDetail }) {
         </svg>
       </div>
       <p className="mb-4 text-sm">{restaurantInfo.address}</p>
-      <button className="py-2 px-4 bg-blue-500 transition hover:bg-blue-600 text-white rounded-full shadow-md">Add review +</button>
+      <button onClick={review} className="py-2 px-4 bg-blue-500 transition hover:bg-blue-600 text-white rounded-full shadow-md">Add review +</button>
     </div>
   )
 }

@@ -128,6 +128,18 @@ export default function App() {
     setRestaurantInfo(restaurant[0])
     setType(4)
   }
+  
+  const reviewRestaurant = (id) => {
+    let restaurant = allRestaurants.filter(restaurant => restaurant.id === id)
+    setRestaurantInfo(restaurant[0])
+    setType(2)
+  }
+
+  const addReview = (id, data) => {
+    let restaurant = allRestaurants.filter(restaurant => restaurant.id === id)
+    restaurant[0].ratings.push(data)
+    setType(1)
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-400 to-green-400 flex">
@@ -166,7 +178,11 @@ export default function App() {
                 <div className="overflow-y-auto max-h-screen">
                   {allRestaurants.map(restaurant => {
                     return (
-                      <RestaurantCard key={restaurant.id} restaurantInfo={restaurant} restaurantDetail={restaurantDetail}></RestaurantCard>
+                      <RestaurantCard 
+                        key={restaurant.id} 
+                        restaurantInfo={restaurant} 
+                        restaurantDetail={restaurantDetail} 
+                        reviewRestaurant={reviewRestaurant}/>
                     )
                   })}
                 </div>
@@ -175,7 +191,7 @@ export default function App() {
 
             {/* Add review */}
             {type === 2 && 
-              <RestaurantReview/>             
+              <RestaurantReview restaurantInfo={restaurantInfo} setType={setType} addReview={addReview}/>             
             }
 
             {/* Add restaurant */}
