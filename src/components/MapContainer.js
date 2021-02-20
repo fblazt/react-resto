@@ -48,7 +48,7 @@ export default function MapContainer({allRestaurants, newRestaurantForm}) {
         onClick={mapClick}>
           <Marker position={position} icon="https://img.icons8.com/fluent/0.5x/maps.png"/>
           {allRestaurants.map(item => {
-            return (<Marker position={item.coordinates} key={item.id} icon="https://img.icons8.com/doodle/0.5x/google-maps-new.png" className="h-8 w-8"/>)
+            return (<Marker position={item.coordinates} key={item.id+5} icon="https://img.icons8.com/doodle/0.5x/google-maps-new.png" className="h-8 w-8"/>)
           })}
       </GoogleMap>
     </LoadScript>
