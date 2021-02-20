@@ -51,12 +51,6 @@ export default function MapContainer({allRestaurants, newRestaurantForm}) {
     console.log(sessionStorage.getItem('tempCoordinates'))
   }
 
-  let options = {
-    mapTypeControl: false,
-    streetViewControl: false,
-    fullscreenControl: false,
-  }
-
   return (
     <LoadScript className="rounded-3xl" googleMapsApiKey={process.env.REACT_APP_MAPS_KEY}>
       <GoogleMap 
@@ -64,14 +58,11 @@ export default function MapContainer({allRestaurants, newRestaurantForm}) {
         mapContainerStyle={containerStyle}
         center={position}
         zoom={zoom}
-        options={options}
         onClick={mapClick}>
-          {/* <Marker
-          position={position}/> */}
+          <Marker position={position} icon="https://img.icons8.com/fluent/0.5x/maps.png"/>
           {allRestaurants.map(item => {
-            return (<Marker position={item.coordinates} key={item.id}/>)
+            return (<Marker position={item.coordinates} key={item.id} icon="https://img.icons8.com/doodle/0.5x/google-maps-new.png" className="h-8 w-8"/>)
           })}
-          {/* {restaurantCoordinates} */}
       </GoogleMap>
     </LoadScript>
   )
