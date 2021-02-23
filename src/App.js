@@ -141,6 +141,13 @@ export default function App() {
     setType(1)
   }
 
+  const filterRestaurant = (selectedRate) => {
+    let filteredRestaurants = allRestaurants.filter(restaurant => {
+      return restaurant.rating <= selectedRate
+    })
+    console.log(filteredRestaurants)
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-400 to-green-400 flex">
       <div className="min-h-screen flex-1">
@@ -167,11 +174,11 @@ export default function App() {
                   <div className="mb-3">
                     <label htmlFor="filter">Filter by rate</label>
                     <select name="filter" id="filter" className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
+                      <option onClick={() => filterRestaurant(1)}>1</option>
+                      <option onClick={() => filterRestaurant(2)}>2</option>
+                      <option onClick={() => filterRestaurant(3)}>3</option>
+                      <option onClick={() => filterRestaurant(4)}>4</option>
+                      <option onClick={() => filterRestaurant(5)}>5</option>
                     </select>
                   </div>
                 </div>
