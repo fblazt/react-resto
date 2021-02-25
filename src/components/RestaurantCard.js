@@ -4,13 +4,34 @@ export default function RestaurantCard({ restaurantInfo, restaurantDetail, revie
 
   const overallRatings = (length) => {
     let ratings = []
-    for (let i = 0; i < length; i++) {
+
+    if ((length % 1 !== 0)) {
+
+      for (let i = 0; i < Math.floor(length); i++) {
+        ratings.push(
+          <svg key={i} className="h-5 w-5 text-yellow-500" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
+          </svg>
+        )
+      }
       ratings.push(
-        <svg key={i} className="h-5 w-5 text-yellow-500" viewBox="0 0 24 24">
-          <path fill="currentColor" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
+        <svg key={ratings.length+1} className="h-5 w-5 text-yellow-500" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M12,15.4V6.1L13.71,10.13L18.09,10.5L14.77,13.39L15.76,17.67M22,9.24L14.81,8.63L12,2L9.19,8.63L2,9.24L7.45,13.97L5.82,21L12,17.27L18.18,21L16.54,13.97L22,9.24Z" />
         </svg>
       )
+
+    } else if (!(length % 1 !== 0)) {
+
+      for (let i = 0; i < length; i++) {
+        ratings.push(
+          <svg key={i} className="h-5 w-5 text-yellow-500" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
+          </svg>
+        )
+      }
+
     }
+    
     return ratings
   }
 

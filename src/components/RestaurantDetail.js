@@ -4,13 +4,34 @@ export default function RestaurantDetail({ restaurantInfo, setType }) {
   
   const overallRatings = (length) => {
     let ratings = []
-    for (let i = 0; i < length; i++) {
+
+    if ((length % 1 !== 0)) {
+
+      for (let i = 0; i < Math.floor(length); i++) {
+        ratings.push(
+          <svg key={i} className="h-5 w-5 text-yellow-500" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
+          </svg>
+        )
+      }
       ratings.push(
-        <svg key={i} className="h-4 w-4 text-yellow-300" viewBox="0 0 24 24">
-          <path fill="currentColor" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
+        <svg key={ratings.length+1} className="h-5 w-5 text-yellow-500" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M12,15.4V6.1L13.71,10.13L18.09,10.5L14.77,13.39L15.76,17.67M22,9.24L14.81,8.63L12,2L9.19,8.63L2,9.24L7.45,13.97L5.82,21L12,17.27L18.18,21L16.54,13.97L22,9.24Z" />
         </svg>
       )
+
+    } else if (!(length % 1 !== 0)) {
+
+      for (let i = 0; i < length; i++) {
+        ratings.push(
+          <svg key={i} className="h-5 w-5 text-yellow-500" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
+          </svg>
+        )
+      }
+
     }
+    
     return ratings
   }
 
@@ -34,13 +55,15 @@ export default function RestaurantDetail({ restaurantInfo, setType }) {
         <div className="mb-2">
           <p className="mb-4 font-semibold text-xl">All reviews</p>
           <div>
-            {restaurantInfo.ratings.map(review => {
+            {restaurantInfo.reviews.map((review, index) => {
               return (
-                <div className="mb-4 flex flex-row">
-                  <div className="flex flex-row items-start justify-center">
-                    <svg className="mr-2 h-12 w-12 text-blue-400" viewBox="0 0 24 24">
-                      <path fill="currentColor" d="M12,19.2C9.5,19.2 7.29,17.92 6,16C6.03,14 10,12.9 12,12.9C14,12.9 17.97,14 18,16C16.71,17.92 14.5,19.2 12,19.2M12,5A3,3 0 0,1 15,8A3,3 0 0,1 12,11A3,3 0 0,1 9,8A3,3 0 0,1 12,5M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2Z" />
-                    </svg>
+                <div key={index} className="mb-4 flex flex-row">
+                  <div className="w-full flex flex-row items-start">
+                    <div>
+                      <svg className="mr-2 h-12 w-12 text-blue-400" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M12,19.2C9.5,19.2 7.29,17.92 6,16C6.03,14 10,12.9 12,12.9C14,12.9 17.97,14 18,16C16.71,17.92 14.5,19.2 12,19.2M12,5A3,3 0 0,1 15,8A3,3 0 0,1 12,11A3,3 0 0,1 9,8A3,3 0 0,1 12,5M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2Z" />
+                      </svg>
+                    </div>
                     <div className="flex flex-col">
                       <div className="mb-4 flex flex-col">
                         <p className="text-lg font-semibold">{review.username}</p>

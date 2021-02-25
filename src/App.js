@@ -13,6 +13,7 @@ export default function App() {
   const [position, setPosition ] = useState({})
   const [type, setType] = useState(1)
   const [allRestaurants, setAllRestaurants] = useState([])
+  const [filteredRestaurants, setFilteredRestaurants] = useState([])
   const [restaurantInfo, setRestaurantInfo] = useState({})
 
   let localRestaurants = [
@@ -26,7 +27,7 @@ export default function App() {
       address: 'Jalan Taman Ratu Raya CC1 No.53, RT.4/RW.13, Kedoya Utara',
       pict:'https://lh5.googleusercontent.com/p/AF1QipMfCQ-dXE9EqgiWkJr9QQRshjKpDmPAjzWel7fE=w408-h305-k-no',
       rating: 4,
-      ratings: [
+      reviews: [
         {
           stars: 4,
           comment: 'Great! But not many veggie options.'
@@ -47,7 +48,7 @@ export default function App() {
       address: 'Jalan Pesing Poglar RT.9/RW.5, Kedaung Kali Angke',
       pict:'https://lh5.googleusercontent.com/p/AF1QipMfCQ-dXE9EqgiWkJr9QQRshjKpDmPAjzWel7fE=w408-h305-k-no',
       rating: 4,
-      ratings: [
+      reviews: [
         {
           stars: 4,
           comment: 'Great! But not many veggie options.'
@@ -74,13 +75,14 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_CORS_HANDLER}https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${position.lat},${position.lng}&radius=2000&type=restaurant&key=
-    ${process.env.REACT_APP_MAPS_KEY}`)
+    axios.get(`${process.env.REACT_APP_CORS_HANDLER}https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${position.lat},${position.lng}&radius=2000&type=restaurant&fields=reviews&key=${process.env.REACT_APP_MAPS_KEY}`)
     .then(res => {
       let data = res.data.results
-      let googleRestaurants = data.map((item,index) =>{     
-        return   {
+      
+      let googleRestaurants = data.map((item, index) => {
+        return  {
           id: index,
+          placeId: item.place_id,
           name: item.name,
           address: item.vicinity,
           coordinates: {
@@ -88,21 +90,33 @@ export default function App() {
             lng: item.geometry.location.lng,
           },
           pict:`https://maps.googleapis.com/maps/api/streetview?size=400x250&location=${item.geometry.location.lat},${item.geometry.location.lng}&heading=70&pitch=0&key=${process.env.REACT_APP_MAPS_KEY}`,
-          rating: 4,
-          ratings: [
-            {
-              username: 'Mamang Asep',
-              stars: 4,
-              comment: 'Great! But not many veggie options.'
-            },
-            {
-              username: 'Siti',
-              stars: 4,
-              comment: 'My favorite restaurant!'
-            },
-          ]
+          rating: 0,
+          reviews: []
         }
       })
+      
+      googleRestaurants.map(restaurant => {
+
+        axios.get(`${process.env.REACT_APP_CORS_HANDLER}https://maps.googleapis.com/maps/api/place/details/json?place_id=${restaurant.placeId}&fields=reviews&key=${process.env.REACT_APP_MAPS_KEY}`)
+        .then(res => {
+          const reducer = (accumulator, currentValue) => accumulator + currentValue
+          let allIndividualRating = res.data.result.reviews.map(review => review.rating)
+          let rating = allIndividualRating.reduce(reducer) / allIndividualRating.length
+
+          let formattedReviews = res.data.result.reviews.map(review => {
+            return {
+              username: review.author_name,
+              stars: review.rating,
+              comment: review.text
+            }
+          })
+
+          restaurant.reviews = formattedReviews
+          restaurant.rating = rating
+        })
+
+      })
+      console.log(googleRestaurants)
       setAllRestaurants(allRestaurants.concat(googleRestaurants))
     })
   }, [position])
@@ -137,15 +151,15 @@ export default function App() {
 
   const addReview = (id, data) => {
     let restaurant = allRestaurants.filter(restaurant => restaurant.id === id)
-    restaurant[0].ratings.push(data)
+    restaurant[0].reviews.push(data)
     setType(1)
   }
 
   const filterRestaurant = (selectedRate) => {
     let filteredRestaurants = allRestaurants.filter(restaurant => {
-      return restaurant.rating <= selectedRate
+      return restaurant.rating == selectedRate
     })
-    console.log(filteredRestaurants)
+    setFilteredRestaurants(filteredRestaurants)
   }
 
   return (
