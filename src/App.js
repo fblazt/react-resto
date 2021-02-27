@@ -82,30 +82,24 @@ export default function App() {
       let data = res.data.results
       
       let googleRestaurants = data.map((item, index) => {
-        return  {
+
+        let restaurant = {
           id: index,
-          placeId: item.place_id,
           name: item.name,
           address: item.vicinity,
           coordinates: {
             lat: item.geometry.location.lat,
             lng: item.geometry.location.lng,
           },
-          pict:`https://maps.googleapis.com/maps/api/streetview?size=400x250&location=${item.geometry.location.lat},${item.geometry.location.lng}&heading=70&pitch=0&key=${process.env.REACT_APP_MAPS_KEY}`,
-          rating: 0,
-          reviews: []
+          pict:`https://maps.googleapis.com/maps/api/streetview?size=400x250&location=${item.geometry.location.lat},${item.geometry.location.lng}&heading=70&pitch=0&key=${process.env.REACT_APP_MAPS_KEY}`
         }
-      })
-      
-      googleRestaurants.map(restaurant => {
 
-        axios.get(`${process.env.REACT_APP_CORS_HANDLER}https://maps.googleapis.com/maps/api/place/details/json?place_id=${restaurant.placeId}&fields=reviews&key=${process.env.REACT_APP_MAPS_KEY}`)
+        axios.get(`${process.env.REACT_APP_CORS_HANDLER}https://maps.googleapis.com/maps/api/place/details/json?place_id=${item.place_id}&fields=reviews&key=${process.env.REACT_APP_MAPS_KEY}`)
         .then(res => {
-          const reducer = (accumulator, currentValue) => accumulator + currentValue
           let allIndividualRating = res.data.result.reviews.map(review => review.rating)
-          let rating = allIndividualRating.reduce(reducer) / allIndividualRating.length
+          restaurant.rating = allIndividualRating.reduce((accumulator, currentValue) => accumulator + currentValue, 0) / allIndividualRating.length
 
-          let formattedReviews = res.data.result.reviews.map(review => {
+          restaurant.reviews = res.data.result.reviews.map(review => {
             return {
               username: review.author_name,
               stars: review.rating,
@@ -113,13 +107,38 @@ export default function App() {
             }
           })
 
-          restaurant.reviews = formattedReviews
-          restaurant.rating = rating
-        })
-
+        return restaurant
       })
-      setAllRestaurants(googleRestaurants)
-      setFilteredRestaurants(googleRestaurants)
+      
+      // let formattedRestaurants = googleRestaurants.map(restaurant => {
+
+      //   axios.get(`${process.env.REACT_APP_CORS_HANDLER}https://maps.googleapis.com/maps/api/place/details/json?place_id=${restaurant.placeId}&fields=reviews&key=${process.env.REACT_APP_MAPS_KEY}`)
+      //   .then(res => {
+      //     const reducer = (accumulator, currentValue) => accumulator + currentValue
+      //     let allIndividualRating = res.data.result.reviews.map(review => review.rating)
+      //     let rating = allIndividualRating.reduce(reducer) / allIndividualRating.length
+
+      //     let formattedReviews = res.data.result.reviews.map(review => {
+      //       return {
+      //         username: review.author_name,
+      //         stars: review.rating,
+      //         comment: review.text
+      //       }
+      //     })
+
+      //     restaurant.reviews = formattedReviews
+      //     restaurant.rating = rating
+
+      //   })
+        
+        return restaurant
+      })
+
+      setTimeout(() => {
+        setAllRestaurants(googleRestaurants)
+        setFilteredRestaurants(googleRestaurants)
+        
+      }, 100);
     })
   }, [position])
 
@@ -152,6 +171,8 @@ export default function App() {
   const addReview = (id, data) => {
     let restaurant = filteredRestaurants.filter(restaurant => restaurant.id === id)
     restaurant[0].reviews.push(data)
+    let restaurantRatings = restaurant[0].reviews.map(review => review.stars)
+    restaurant[0].rating = restaurantRatings.reduce((accumulator, currentValue) => accumulator + currentValue, 0) / restaurantRatings.length
     setRateFilter([1, 5])
     setType(1)
   }
@@ -174,7 +195,10 @@ export default function App() {
           </div>   */}
 
           <div className="mr-2 col-span-9 row-span-6 bg-white shadow-lg rounded-3xl z-40">
-            <MapContainer allRestaurants={filteredRestaurants} newRestaurantForm={newRestaurantForm}/>
+            <MapContainer 
+              allRestaurants={filteredRestaurants} 
+              newRestaurantForm={newRestaurantForm}
+              restaurantDetail={restaurantDetail}/>
           </div>
 
           
