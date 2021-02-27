@@ -2,11 +2,12 @@ import React from 'react'
 import { useState } from 'react'
 
 export default function RestaurantReview({setType, restaurantInfo, addReview}) {
+  const [username, setUsername] = useState('') 
   const [review, setReview] = useState('') 
   const [rate, setRate] = useState(1) 
 
   let data = {
-    username: 'Saprudin',
+    username: username,
     stars: rate,
     comment: review
   }
@@ -22,22 +23,26 @@ export default function RestaurantReview({setType, restaurantInfo, addReview}) {
       <div>
         <h2 className="mb-3 text-3xl font-semibold">{restaurantInfo.name}</h2>
         <img src={`https://maps.googleapis.com/maps/api/streetview?size=800x400&location=${restaurantInfo.coordinates.lat},${restaurantInfo.coordinates.lng}&heading=70&pitch=0&key=${process.env.REACT_APP_MAPS_KEY}`} alt="" className="mb-6 rounded-3xl shadow-md"/>
-        <div>
+        <div className="mb-3">
+          <label htmlFor="username" className="text-lg text-gray-800">Your name</label>
+          <input type="text" name="username" id="username" className="w-full mt-1 px-2 border-2 border-gray-400 hover:border-blue-400 focus:border-blue-400 rounded-md" value={username} onChange={(e) => setUsername(e.target.value)}/>
+        </div>
+        <div className="mb-3">
           <label htmlFor="rate">Your rating</label>
-          <div className="mb-2 flex flex-nowrap">
-            <svg onClick={() => setRate(1)} className={rate >= 1 ? 'h-4 w-4 text-yellow-300' : 'h-4 w-4 text-gray-300'} viewBox="0 0 24 24">
+          <div className="flex flex-nowrap">
+            <svg onClick={() => setRate(1)} className={rate >= 1 ? 'h-7 w-7 text-yellow-300' : 'h-7 w-7 text-gray-300'} viewBox="0 0 24 24">
               <path fill="currentColor" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
             </svg>
-            <svg onClick={() => setRate(2)} className={rate >= 2 ? 'h-4 w-4 text-yellow-300' : 'h-4 w-4 text-gray-300'} viewBox="0 0 24 24">
+            <svg onClick={() => setRate(2)} className={rate >= 2 ? 'h-7 w-7 text-yellow-300' : 'h-7 w-7 text-gray-300'} viewBox="0 0 24 24">
               <path fill="currentColor" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
             </svg>
-            <svg onClick={() => setRate(3)} className={rate >= 3 ? 'h-4 w-4 text-yellow-300' : 'h-4 w-4 text-gray-300'} viewBox="0 0 24 24">
+            <svg onClick={() => setRate(3)} className={rate >= 3 ? 'h-7 w-7 text-yellow-300' : 'h-7 w-7 text-gray-300'} viewBox="0 0 24 24">
               <path fill="currentColor" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
             </svg>
-            <svg onClick={() => setRate(4)} className={rate >= 4 ? 'h-4 w-4 text-yellow-300' : 'h-4 w-4 text-gray-300'} viewBox="0 0 24 24">
+            <svg onClick={() => setRate(4)} className={rate >= 4 ? 'h-7 w-7 text-yellow-300' : 'h-7 w-7 text-gray-300'} viewBox="0 0 24 24">
               <path fill="currentColor" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
             </svg>
-            <svg onClick={() => setRate(5)} className={rate >= 5 ? 'h-4 w-4 text-yellow-300' : 'h-4 w-4 text-gray-300'} viewBox="0 0 24 24">
+            <svg onClick={() => setRate(5)} className={rate >= 5 ? 'h-7 w-7 text-yellow-300' : 'h-7 w-7 text-gray-300'} viewBox="0 0 24 24">
               <path fill="currentColor" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
             </svg>
           </div>
