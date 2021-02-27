@@ -9,8 +9,8 @@ export default function RestaurantAdd({ allRestaurants, addRestaurant, setType }
     id: allRestaurants[allRestaurants.length - 1].id + 1,
     name: name,
     coordinates: {
-      lat: sessionStorage.getItem('tempCoordinates').replace(/[()]/g, "").split(', ')[0],
-      lng: sessionStorage.getItem('tempCoordinates').replace(/[()]/g, "").split(', ')[1]
+      lat: Number(sessionStorage.getItem('tempCoordinates').replace(/[()]/g, "").split(', ')[0]),
+      lng: Number(sessionStorage.getItem('tempCoordinates').replace(/[()]/g, "").split(', ')[1])
     },
     address: address,
     pict: `https://maps.googleapis.com/maps/api/streetview?size=800x400&location=${sessionStorage.getItem('tempCoordinates').replace(/[()]/g, "").split(', ')[0]},${sessionStorage.getItem('tempCoordinates').replace(/[()]/g, "").split(', ')[1]}&heading=70&pitch=0&key=${process.env.REACT_APP_MAPS_KEY}`,
