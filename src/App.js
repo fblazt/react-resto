@@ -12,7 +12,6 @@ import MapContainer from './components/MapContainer'
 export default function App() {
   const [position, setPosition ] = useState({})
   const [type, setType] = useState(1)
-  const [mapContainerKey, setMapContainerKey] = useState(99)
   const [allRestaurants, setAllRestaurants] = useState([])
   const [rateFilter, setRateFilter] = useState([1, 5])
   const [filteredRestaurants, setFilteredRestaurants] = useState([])
@@ -97,8 +96,7 @@ export default function App() {
         axios.get(`${process.env.REACT_APP_CORS_HANDLER}https://maps.googleapis.com/maps/api/place/details/json?place_id=${item.place_id}&fields=reviews&key=${process.env.REACT_APP_MAPS_KEY}`)
         .then(res => {
           let allIndividualRating = res.data.result.reviews.map(review => review.rating)
-          restaurant.rating = allIndividualRating.reduce((accumulator, currentValue) => accumulator + currentValue, 0) / allIndividualRating.length
-
+          
           restaurant.reviews = res.data.result.reviews.map(review => {
             return {
               username: review.author_name,
@@ -106,31 +104,8 @@ export default function App() {
               comment: review.text
             }
           })
-
-        return restaurant
+          restaurant.rating = rateLengthLimiter(allIndividualRating)
       })
-      
-      // let formattedRestaurants = googleRestaurants.map(restaurant => {
-
-      //   axios.get(`${process.env.REACT_APP_CORS_HANDLER}https://maps.googleapis.com/maps/api/place/details/json?place_id=${restaurant.placeId}&fields=reviews&key=${process.env.REACT_APP_MAPS_KEY}`)
-      //   .then(res => {
-      //     const reducer = (accumulator, currentValue) => accumulator + currentValue
-      //     let allIndividualRating = res.data.result.reviews.map(review => review.rating)
-      //     let rating = allIndividualRating.reduce(reducer) / allIndividualRating.length
-
-      //     let formattedReviews = res.data.result.reviews.map(review => {
-      //       return {
-      //         username: review.author_name,
-      //         stars: review.rating,
-      //         comment: review.text
-      //       }
-      //     })
-
-      //     restaurant.reviews = formattedReviews
-      //     restaurant.rating = rating
-
-      //   })
-        
         return restaurant
       })
 
@@ -142,6 +117,18 @@ export default function App() {
     })
   }, [position])
 
+  const rateLengthLimiter = (rate) => {
+    let formattedRate
+
+    formattedRate = rate.reduce((accumulator, currentValue) => accumulator + currentValue, 0) / rate.length
+  
+    if (String(formattedRate).length > 3) {
+      formattedRate = String(rate).slice(0, 3).replace(",", ".")
+    }
+  
+    return Number(formattedRate)
+  }
+
   const newRestaurantForm = () => {
     setType(3)
   }
@@ -151,7 +138,6 @@ export default function App() {
     existingRestaurants.push(data)
     setAllRestaurants(existingRestaurants)
     setFilteredRestaurants(existingRestaurants)
-    // setMapContainerKey(mapContainerKey + 1)
     setRateFilter([1, 5])
     setType(1)
   }
@@ -172,7 +158,7 @@ export default function App() {
     let restaurant = filteredRestaurants.filter(restaurant => restaurant.id === id)
     restaurant[0].reviews.push(data)
     let restaurantRatings = restaurant[0].reviews.map(review => review.stars)
-    restaurant[0].rating = restaurantRatings.reduce((accumulator, currentValue) => accumulator + currentValue, 0) / restaurantRatings.length
+    restaurant[0].rating = rateLengthLimiter(restaurantRatings)
     setRateFilter([1, 5])
     setType(1)
   }
