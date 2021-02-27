@@ -45,7 +45,10 @@ export default function RestaurantCard({ restaurantInfo, restaurantDetail, revie
       <img src={restaurantInfo.pict} alt="" className="mb-4 rounded-3xl shadow-lg"/>
       <h4 className="mb-3 text-2xl font-semibold">{restaurantInfo.name}</h4>
       <div className="mb-1 flex flex-nowrap text-yellow-500">
-        {overallRatings(restaurantInfo.rating)}
+        {restaurantInfo.rating === 0
+          ? <p>No ratings yet</p>
+          : overallRatings(restaurantInfo.rating)
+        }
       </div>
       <p className="mb-4 text-sm">{restaurantInfo.address}</p>
       <button onClick={review} className="py-2 px-4 bg-blue-500 transition hover:bg-blue-600 text-white rounded-full shadow-md">Add review +</button>

@@ -14,19 +14,8 @@ export default function RestaurantAdd({ allRestaurants, addRestaurant, setType }
     },
     address: address,
     pict: `https://maps.googleapis.com/maps/api/streetview?size=800x400&location=${sessionStorage.getItem('tempCoordinates').replace(/[()]/g, "").split(', ')[0]},${sessionStorage.getItem('tempCoordinates').replace(/[()]/g, "").split(', ')[1]}&heading=70&pitch=0&key=${process.env.REACT_APP_MAPS_KEY}`,
-    rating: 4,
-    ratings: [
-      {
-        username: 'Tatang Sutarma',
-        stars: 4,
-        comment: 'Great! But not many veggie options.'
-      },
-      {
-        username: 'Rudi',
-        stars: 4,
-        comment: 'My favorite restaurant!'
-      },
-    ]
+    rating: 0,
+    reviews: []
   }
 
   const newRestaurant = (e) => {

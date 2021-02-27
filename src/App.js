@@ -12,7 +12,9 @@ import MapContainer from './components/MapContainer'
 export default function App() {
   const [position, setPosition ] = useState({})
   const [type, setType] = useState(1)
+  const [mapContainerKey, setMapContainerKey] = useState(99)
   const [allRestaurants, setAllRestaurants] = useState([])
+  const [rateFilter, setRateFilter] = useState([1, 5])
   const [filteredRestaurants, setFilteredRestaurants] = useState([])
   const [restaurantInfo, setRestaurantInfo] = useState({})
 
@@ -116,8 +118,8 @@ export default function App() {
         })
 
       })
-      console.log(googleRestaurants)
-      setAllRestaurants(allRestaurants.concat(googleRestaurants))
+      setAllRestaurants(googleRestaurants)
+      setFilteredRestaurants(googleRestaurants)
     })
   }, [position])
 
@@ -134,31 +136,33 @@ export default function App() {
     let existingRestaurants = [...allRestaurants]
     existingRestaurants.push(data)
     setAllRestaurants(existingRestaurants)
+    setFilteredRestaurants(existingRestaurants)
+    // setMapContainerKey(mapContainerKey + 1)
+    setRateFilter([1, 5])
     setType(1)
   }
 
   const restaurantDetail= (id) => {
-    let restaurant = allRestaurants.filter(restaurant => restaurant.id === id)
+    let restaurant = filteredRestaurants.filter(restaurant => restaurant.id === id)
     setRestaurantInfo(restaurant[0])
     setType(4)
   }
   
   const reviewRestaurant = (id) => {
-    let restaurant = allRestaurants.filter(restaurant => restaurant.id === id)
+    let restaurant = filteredRestaurants.filter(restaurant => restaurant.id === id)
     setRestaurantInfo(restaurant[0])
     setType(2)
   }
 
   const addReview = (id, data) => {
-    let restaurant = allRestaurants.filter(restaurant => restaurant.id === id)
+    let restaurant = filteredRestaurants.filter(restaurant => restaurant.id === id)
     restaurant[0].reviews.push(data)
+    setRateFilter([1, 5])
     setType(1)
   }
 
   const filterRestaurant = (selectedRate) => {
-    let filteredRestaurants = allRestaurants.filter(restaurant => {
-      return restaurant.rating == selectedRate
-    })
+    let filteredRestaurants = allRestaurants.filter(restaurant => restaurant.rating >= selectedRate[0] && restaurant.rating <= selectedRate[1])
     setFilteredRestaurants(filteredRestaurants)
   }
 
@@ -175,7 +179,7 @@ export default function App() {
           </div>   */}
 
           <div className="mr-2 col-span-9 row-span-6 bg-white shadow-lg rounded-3xl z-40">
-            <MapContainer allRestaurants={allRestaurants} newRestaurantForm={newRestaurantForm}/>
+            <MapContainer allRestaurants={filteredRestaurants} newRestaurantForm={newRestaurantForm}/>
           </div>
 
           
@@ -184,20 +188,47 @@ export default function App() {
             {/* Restaurant list */}
             {type === 1 &&
               <div>
-                <div className="w-full flex flex-row items-end content-end">
-                  <div className="mb-3">
-                    <label htmlFor="filter">Filter by rate</label>
-                    <select name="filter" id="filter" className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                      <option onClick={() => filterRestaurant(1)}>1</option>
-                      <option onClick={() => filterRestaurant(2)}>2</option>
-                      <option onClick={() => filterRestaurant(3)}>3</option>
-                      <option onClick={() => filterRestaurant(4)}>4</option>
-                      <option onClick={() => filterRestaurant(5)}>5</option>
-                    </select>
+                <div className="w-full mb-3">
+                  <label htmlFor="filter">Filter by rate</label>
+                  <div className="w-full p-2 flex flex-row border border-gray-400 rounded-md">
+                    <div className="w-8/12 flex flex-row items-center">
+                      <select className="w-2/5 mt-1 block py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" value={rateFilter[0]}>
+                        <option onClick={() => {setRateFilter([1, 5])}}>1</option>
+                        <option onClick={() => {setRateFilter([2, 5])}}>2</option>
+                        <option onClick={() => {setRateFilter([3, 5])}}>3</option>
+                        <option onClick={() => {setRateFilter([4, 5])}}>4</option>
+                        <option onClick={() => {setRateFilter([5, 5])}}>5</option>
+                      </select>
+                      <span className="w-1/5 text-center font-bold">-</span>
+                      <select className="w-2/5 mt-1 block py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" value={rateFilter[1]}>
+                        <option 
+                          disabled={rateFilter[0] === 2 || rateFilter[0] === 3 || rateFilter[0] === 4 || rateFilter[0] === 5}
+                          onClick={() => {setRateFilter([rateFilter[0], 1])}}>
+                            1
+                        </option>
+                        <option 
+                          disabled={rateFilter[0] === 3 || rateFilter[0] === 4 || rateFilter[0] === 5}
+                          onClick={() => {setRateFilter([rateFilter[0], 2])}}>
+                            2
+                        </option>
+                        <option 
+                          disabled={rateFilter[0] === 4 || rateFilter[0] === 5}
+                          onClick={() => {setRateFilter([rateFilter[0], 3])}}>
+                            3
+                        </option>
+                        <option 
+                          disabled={rateFilter[0] === 5}
+                          onClick={() => {setRateFilter([rateFilter[0], 4])}}>
+                            4
+                        </option>
+                        <option onClick={() => {setRateFilter([rateFilter[0], 5])}}>5</option>
+                      </select>
+                    </div>
+                    <button onClick={() => filterRestaurant(rateFilter)} className="w-4/12 ml-1 px-2 bg-blue-500 transition hover:bg-blue-600 text-white rounded-md shadow-md">Filter</button>
                   </div>
                 </div>
                 <div className="overflow-y-auto max-h-screen">
-                  {allRestaurants.map(restaurant => {
+                  {filteredRestaurants.map(restaurant => {
                     return (
                       <RestaurantCard 
                         key={restaurant.id} 
@@ -217,7 +248,7 @@ export default function App() {
 
             {/* Add restaurant */}
             {type === 3 && 
-              <RestaurantAdd allRestaurants={allRestaurants} addRestaurant={addRestaurant} setType={setType} />
+              <RestaurantAdd allRestaurants={filteredRestaurants} addRestaurant={addRestaurant} setType={setType} />
             }
 
             {/* Restaurant detail */}
