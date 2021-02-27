@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function RestaurantDetail({ restaurantInfo, setType }) {
+export default function RestaurantDetail({ restaurantInfo, setType, reviewRestaurant }) {
   
   const overallRatings = (length) => {
     let ratings = []
@@ -42,17 +42,19 @@ export default function RestaurantDetail({ restaurantInfo, setType }) {
         <h2 className="mb-3 text-3xl font-semibold">{restaurantInfo.name}</h2>
         <img src={`https://maps.googleapis.com/maps/api/streetview?size=800x400&location=${restaurantInfo.coordinates.lat},${restaurantInfo.coordinates.lng}&heading=70&pitch=0&key=${process.env.REACT_APP_MAPS_KEY}`} alt="" className="mb-6 rounded-3xl shadow-md"/>
         <div className="mb-6">
-          {/* <p className="mb-2 font-semibold text-lg">Overall rating</p> */}
-          <div className="flex flex-col items-end">
-          {restaurantInfo.rating === 0
-            ? <p>No ratings yet</p>
-            : <div className="flex flex-col items-center">
-                <p className="mr-2 text-4xl">{restaurantInfo.rating}</p>
-                <div className="flex flex-nowrap">
-                  {overallRatings(restaurantInfo.rating)}
+          <div className="flex flex-row justify-between">
+            <button onClick={() => reviewRestaurant(restaurantInfo.id)} className="py-1 px-2 bg-blue-500 transition hover:bg-blue-600 text-white rounded-full shadow-md">Add review +</button>
+            <div className="flex flex-col items-end">
+            {restaurantInfo.rating === 0
+              ? <p>No ratings yet</p>
+              : <div className="flex flex-col items-center">
+                  <p className="mr-2 text-4xl">{restaurantInfo.rating}</p>
+                  <div className="flex flex-nowrap">
+                    {overallRatings(restaurantInfo.rating)}
+                  </div>
                 </div>
-              </div>
-          }
+            }
+            </div>
           </div>
         </div>
         <div className="mb-2">

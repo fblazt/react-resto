@@ -272,7 +272,7 @@ export default function App() {
 
             {/* Restaurant detail */}
             {type === 4 && 
-              <RestaurantDetail restaurantInfo={restaurantInfo} setType={setType} />
+              <RestaurantDetail restaurantInfo={restaurantInfo} setType={setType} reviewRestaurant={reviewRestaurant}/>
             }
 
           </div>
