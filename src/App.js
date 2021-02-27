@@ -247,15 +247,18 @@ export default function App() {
                   </div>
                 </div>
                 <div className="overflow-y-auto max-h-screen">
-                  {filteredRestaurants.map(restaurant => {
-                    return (
-                      <RestaurantCard 
-                        key={restaurant.id} 
-                        restaurantInfo={restaurant} 
-                        restaurantDetail={restaurantDetail} 
-                        reviewRestaurant={reviewRestaurant}/>
-                    )
-                  })}
+                  {filteredRestaurants.length === 0
+                    ? <p>No matching restaurants</p>
+                    : filteredRestaurants.map(restaurant => {
+                      return (
+                        <RestaurantCard 
+                          key={restaurant.id} 
+                          restaurantInfo={restaurant} 
+                          restaurantDetail={restaurantDetail} 
+                          reviewRestaurant={reviewRestaurant}/>
+                      )
+                    })
+                  }
                 </div>
               </div>
             }
