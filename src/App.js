@@ -123,11 +123,6 @@ export default function App() {
     })
   }, [position])
 
-
-  const changeComponent = (type) => {
-    setType(type)
-  }
-
   const newRestaurantForm = () => {
     setType(3)
   }
