@@ -2,7 +2,6 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-import Search from './components/Search'
 import RestaurantCard from './components/RestaurantCard' 
 import RestaurantDetail from './components/RestaurantDetail' 
 import RestaurantReview from './components/RestaurantReview' 
