@@ -171,15 +171,11 @@ export default function App() {
     <div className="min-h-screen bg-gradient-to-br from-blue-400 to-green-400 flex">
       <div className="min-h-screen flex-1">
         <div className="min-h-screen p-3 grid grid-cols-12 grid-rows-6">
-          <div className="z-50 p-6 fixed top-6 left-6 bg-gradient-to-br from-blue-400 to-green-400 text-white shadow-md rounded-3xl flex items-center justify-center font-bold text-6xl">
+          <div className="z-50 p-3 lg:p-6 fixed top-4 lg:top-6 left-4 lg:left-6 bg-gradient-to-br from-blue-400 to-green-400 text-white shadow-md rounded-2xl lg:rounded-3xl flex items-center justify-center font-bold text-xl lg:text-6xl">
             <span>R</span>
           </div>
-          
-          {/* <div className="ml-2 mr-2 mb-2 col-span-8 rounded-3xl">
-            <Search/>
-          </div>   */}
 
-          <div className="mr-2 col-span-9 row-span-6 bg-white shadow-lg rounded-3xl z-40">
+          <div className="mb-4 lg:mb-0 lg:mr-2 h-60 lg:h-auto col-span-12 lg:col-span-9 row-span-1 lg:row-span-6 bg-white shadow-lg rounded-3xl z-40">
             <MapContainer 
               allRestaurants={filteredRestaurants} 
               newRestaurantForm={newRestaurantForm}
@@ -187,7 +183,7 @@ export default function App() {
           </div>
 
           
-          <div className="h-6/12 ml-2 py-2 px-4 col-span-3 row-span-6 bg-white shadow-lg rounded-3xl">
+          <div className="lg:ml-2 py-2 px-4 col-span-12 lg:col-span-3 row-span-5 lg:row-span-6 bg-white shadow-lg rounded-3xl">
 
             {/* Restaurant list */}
             {type === 1 &&

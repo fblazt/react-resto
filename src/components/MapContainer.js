@@ -35,6 +35,7 @@ export default function MapContainer({allRestaurants, newRestaurantForm, restaur
     mapTypeControl: false,
     streetViewControl: false,
     fullscreenControl: false,
+    zoomControl: false
   }
 
   return (
