@@ -94,16 +94,23 @@ export default function App() {
 
         axios.get(`${process.env.REACT_APP_CORS_HANDLER}https://maps.googleapis.com/maps/api/place/details/json?place_id=${item.place_id}&fields=reviews&key=${process.env.REACT_APP_MAPS_KEY}`)
         .then(res => {
-          let allIndividualRating = res.data.result.reviews.map(review => review.rating)
-          
-          restaurant.reviews = res.data.result.reviews.map(review => {
-            return {
-              username: review.author_name,
-              stars: review.rating,
-              comment: review.text
-            }
-          })
-          restaurant.rating = rateLengthLimiter(allIndividualRating)
+          let reviews = res.data.result.reviews
+
+          if (!reviews) {
+            restaurant.reviews = []
+            restaurant.rating = 0
+          } else if (reviews) {
+            let allIndividualRating = reviews.map(review => review.rating)
+            
+            restaurant.reviews = reviews.map(review => {
+              return {
+                username: review.author_name,
+                stars: review.rating,
+                comment: review.text
+              }
+            })
+            restaurant.rating = rateLengthLimiter(allIndividualRating)
+          }
       })
         return restaurant
       })
@@ -119,10 +126,10 @@ export default function App() {
   const rateLengthLimiter = (rate) => {
     let formattedRate
 
-    formattedRate = rate.reduce((accumulator, currentValue) => accumulator + currentValue, 0) / rate.length
+    formattedRate = ((rate.reduce((accumulator, currentValue) => accumulator + currentValue, 0)) * 5) / (rate.length * 5)
   
     if (String(formattedRate).length > 3) {
-      formattedRate = String(rate).slice(0, 3).replace(",", ".")
+      formattedRate = String(formattedRate).slice(0, 3).replace(",", ".")
     }
   
     return Number(formattedRate)
@@ -192,7 +199,7 @@ export default function App() {
                   <label htmlFor="filter">Filter by rate</label>
                   <div className="w-full p-2 flex flex-row border border-gray-400 rounded-md">
                     <div className="w-8/12 flex flex-row items-center">
-                      <select className="w-2/5 mt-1 block py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" value={rateFilter[0]}>
+                      <select className="w-2/5 mt-1 block py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" defaultValue={rateFilter[0]}>
                         <option onClick={() => {setRateFilter([1, 5])}}>1</option>
                         <option onClick={() => {setRateFilter([2, 5])}}>2</option>
                         <option onClick={() => {setRateFilter([3, 5])}}>3</option>
@@ -200,7 +207,7 @@ export default function App() {
                         <option onClick={() => {setRateFilter([5, 5])}}>5</option>
                       </select>
                       <span className="w-1/5 text-center font-bold">-</span>
-                      <select className="w-2/5 mt-1 block py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" value={rateFilter[1]}>
+                      <select className="w-2/5 mt-1 block py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" defaultValue={rateFilter[1]}>
                         <option 
                           disabled={rateFilter[0] === 2 || rateFilter[0] === 3 || rateFilter[0] === 4 || rateFilter[0] === 5}
                           onClick={() => {setRateFilter([rateFilter[0], 1])}}>
