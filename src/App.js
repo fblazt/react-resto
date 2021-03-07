@@ -11,7 +11,7 @@ import MapContainer from './components/MapContainer'
 
 export default function App() {
   const [position, setPosition ] = useState({})
-  const [type, setType] = useState(1)
+  const [type, setType] = useState('restaurant-list')
   const [staticRestaurants, setStaticRestaurants] = useState([])
   const [allRestaurants, setAllRestaurants] = useState([])
   const [rateFilter, setRateFilter] = useState([1, 5])
@@ -113,7 +113,7 @@ export default function App() {
   }
 
   const newRestaurantForm = () => {
-    setType(3)
+    setType('restaurant-new-form')
   }
 
   const addRestaurant = (data) => {
@@ -122,19 +122,19 @@ export default function App() {
     setAllRestaurants(existingRestaurants)
     setFilteredRestaurants(existingRestaurants)
     setRateFilter([1, 5])
-    setType(1)
+    setType('restaurant-list')
   }
 
   const restaurantDetail= (id) => {
     let restaurant = filteredRestaurants.filter(restaurant => restaurant.id === id)
     setRestaurantInfo(restaurant[0])
-    setType(4)
+    setType('restaurant-detail')
   }
   
   const reviewRestaurant = (id) => {
     let restaurant = filteredRestaurants.filter(restaurant => restaurant.id === id)
     setRestaurantInfo(restaurant[0])
-    setType(2)
+    setType('restaurant-review-form')
   }
 
   const addReview = (id, data) => {
@@ -143,7 +143,7 @@ export default function App() {
     let restaurantRatings = restaurant[0].reviews.map(review => review.stars)
     restaurant[0].rating = rateLengthLimiter(restaurantRatings)
     setRateFilter([1, 5])
-    setType(1)
+    setType('restaurant-list')
   }
 
   const filterRestaurant = (selectedRate) => {
@@ -170,7 +170,7 @@ export default function App() {
           <div className="lg:ml-2 py-2 px-4 col-span-12 lg:col-span-3 row-span-5 lg:row-span-6 bg-white shadow-lg rounded-3xl">
 
             {/* Restaurant list */}
-            {type === 1 &&
+            {type === 'restaurant-list' &&
               <div>
                 <div className="w-full mb-3">
                   <label htmlFor="filter">Filter by rate</label>
@@ -229,17 +229,17 @@ export default function App() {
             }
 
             {/* Add review */}
-            {type === 2 && 
+            {type === 'restaurant-review-form' && 
               <RestaurantReview restaurantInfo={restaurantInfo} setType={setType} addReview={addReview}/>             
             }
 
             {/* Add restaurant */}
-            {type === 3 && 
+            {type === 'restaurant-new-form' && 
               <RestaurantAdd allRestaurants={filteredRestaurants} addRestaurant={addRestaurant} setType={setType} />
             }
 
             {/* Restaurant detail */}
-            {type === 4 && 
+            {type === 'restaurant-detail' && 
               <RestaurantDetail restaurantInfo={restaurantInfo} setType={setType} reviewRestaurant={reviewRestaurant}/>
             }
 

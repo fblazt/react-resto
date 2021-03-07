@@ -39,7 +39,7 @@ export default function RestaurantDetail({ restaurantInfo, setType, reviewRestau
     <div>
 
       {/* Back navigation button */}
-      <button onClick={() => setType(1)} className="mb-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-full text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">Back</button>
+      <button onClick={() => setType('restaurant-list')} className="mb-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-full text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">Back</button>
       {/* Back navigation button */}
 
       {/* Restaurant detail information */}
