@@ -47,7 +47,7 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_CORS_HANDLER}https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${position.lat},${position.lng}&radius=2000&type=restaurant&fields=reviews&k${process.env.REACT_APP_MAPS_KEY}`)
+    axios.get(`${process.env.REACT_APP_CORS_HANDLER}https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${position.lat},${position.lng}&radius=2000&type=restaurant&fields=reviews&key=${process.env.REACT_APP_MAPS_KEY}`)
     .then(res => {
       let data = res.data.results
       
