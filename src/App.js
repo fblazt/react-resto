@@ -2,6 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
+import localRestaurants from './localRestaurants.json'
 import RestaurantCard from './components/RestaurantCard' 
 import RestaurantDetail from './components/RestaurantDetail' 
 import RestaurantReview from './components/RestaurantReview' 
@@ -11,55 +12,11 @@ import MapContainer from './components/MapContainer'
 export default function App() {
   const [position, setPosition ] = useState({})
   const [type, setType] = useState(1)
+  const [staticRestaurants, setStaticRestaurants] = useState([])
   const [allRestaurants, setAllRestaurants] = useState([])
   const [rateFilter, setRateFilter] = useState([1, 5])
   const [filteredRestaurants, setFilteredRestaurants] = useState([])
   const [restaurantInfo, setRestaurantInfo] = useState({})
-
-  let localRestaurants = [
-    {
-      id: -2,
-      name: 'Bakery',
-      coordinates: {
-        lat: -6.151353501429153,
-        lng: 106.781478421907
-      },
-      address: 'Jalan Taman Ratu Raya CC1 No.53, RT.4/RW.13, Kedoya Utara',
-      pict:'https://lh5.googleusercontent.com/p/AF1QipMfCQ-dXE9EqgiWkJr9QQRshjKpDmPAjzWel7fE=w408-h305-k-no',
-      rating: 4,
-      reviews: [
-        {
-          stars: 4,
-          comment: 'Great! But not many veggie options.'
-        },
-        {
-          stars: 4,
-          comment: 'My favorite restaurant!'
-        },
-      ]
-    },
-    {
-      id: -1,
-      name: 'Soup',
-      coordinates: {
-        lat: -6.154255057375307,
-        lng: 106.77551311782378
-      },
-      address: 'Jalan Pesing Poglar RT.9/RW.5, Kedaung Kali Angke',
-      pict:'https://lh5.googleusercontent.com/p/AF1QipMfCQ-dXE9EqgiWkJr9QQRshjKpDmPAjzWel7fE=w408-h305-k-no',
-      rating: 4,
-      reviews: [
-        {
-          stars: 4,
-          comment: 'Great! But not many veggie options.'
-        },
-        {
-          stars: 4,
-          comment: 'My favorite restaurant!'
-        },
-      ]
-    }
-  ]
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -75,7 +32,22 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_CORS_HANDLER}https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${position.lat},${position.lng}&radius=2000&type=restaurant&fields=reviews&key=${process.env.REACT_APP_MAPS_KEY}`)
+    const formattedLocalRestaurants = localRestaurants.map(restaurant => {
+      let allIndividualRating = restaurant.reviews.map(review => review.stars)
+  
+      restaurant.rating = rateLengthLimiter(allIndividualRating)
+      restaurant.pict = restaurant.pict.concat(process.env.REACT_APP_MAPS_KEY)
+
+      return restaurant
+    })
+
+    setTimeout(() => {
+      setStaticRestaurants(formattedLocalRestaurants)
+    }, 100);
+  }, [])
+
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_CORS_HANDLER}https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${position.lat},${position.lng}&radius=2000&type=restaurant&fields=reviews&k${process.env.REACT_APP_MAPS_KEY}`)
     .then(res => {
       let data = res.data.results
       
@@ -116,9 +88,14 @@ export default function App() {
       })
 
       setTimeout(() => {
-        setAllRestaurants(googleRestaurants)
-        setFilteredRestaurants(googleRestaurants)
-        
+        setAllRestaurants(staticRestaurants.concat(googleRestaurants))
+        setFilteredRestaurants(staticRestaurants.concat(googleRestaurants))
+      }, 100);
+    })
+    .catch(() => {
+      setTimeout(() => {
+        setAllRestaurants(staticRestaurants)
+        setFilteredRestaurants(staticRestaurants)
       }, 100);
     })
   }, [position])

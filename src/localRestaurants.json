@@ -1,0 +1,53 @@
+[
+  {
+    "id": -3,
+    "name": "Kedai Kopi",
+    "address": "Jalan Kusuma 1c, Grogol",
+    "coordinates": {
+      "lat": -6.149776014671203,
+      "lng": 106.77992759632455
+    },
+    "pict": "https://maps.googleapis.com/maps/api/streetview?size=400x250&location=-6.149776014671203,106.77992759632455&heading=70&pitch=0&key=",
+    "reviews": [
+      {
+        "username": "Rambo",
+        "stars": 4,
+        "comment": "One of the best cafe"
+      }
+    ]
+  },
+  {
+    "id": -2,
+    "name": "Nasi Rames",
+    "address": "Jalan Kusuma 1b, Grogol",
+    "coordinates": {
+      "lat": -6.150425706986849,
+      "lng": 106.78039161848413
+    },
+    "pict": "https://maps.googleapis.com/maps/api/streetview?size=400x250&location=-6.150425706986849,106.78039161848413&heading=70&pitch=0&key=",
+    "reviews": [
+      {
+        "username": "John Denver",
+        "stars": 3,
+        "comment": "What was that? jeez"
+      }
+    ]
+  },
+  {
+    "id": -1,
+    "name": "Bakso Botak",
+    "address": "Jalan Empang Bahagia VIII, Jelambar",
+    "coordinates": {
+      "lat": -6.15873658006118,
+      "lng": 106.78500608354639
+    },
+    "pict": "https://maps.googleapis.com/maps/api/streetview?size=400x250&location=-6.15873658006118,106.78500608354639&heading=70&pitch=0&key=",
+    "reviews": [
+      {
+        "username": "Rata Touli",
+        "stars": 5,
+        "comment": "The meatball is nice"
+      }
+    ]
+  }
+]
